@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.core import serializers
+from rest_framework.utils import json
 
 
 class Massanger(models.Model):
@@ -22,6 +24,15 @@ class ConversationList(models.Model):
     create_at=models.DateTimeField(auto_now_add=True)
     owner = models.ForeignKey(User, related_name='Messanger', on_delete=models.CASCADE,null=True)
     user_id=models.IntegerField(default=1)
+
+    @property
+    def latest_message(self):
+        s=""
+        ll=serializers.serialize("json", self.owner.Messages.filter(sender_id=self.user_id))
+        struct = json.loads(ll)
+        for i in struct:
+            s=i
+        return s
 
 class Messages(models.Model):
     receiver_id=models.IntegerField()

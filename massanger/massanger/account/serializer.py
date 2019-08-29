@@ -2,7 +2,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from rest_framework import serializers
 from massage.models import Massanger
-from massage.models import ConversationList , Messages
+from massage.models import ConversationList, Messages
 
 class Searchserializer(serializers.Serializer):
 	username = serializers.CharField()
@@ -15,7 +15,8 @@ class Massangerserializer(serializers.ModelSerializer):
 class ConversationListSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = ConversationList
-		fields = ['first_name', 'last_name', 'create_at','user_id']
+		fields = ['first_name', 'last_name', 'create_at','user_id', 'latest_message']
+		extra_kwargs = {'latest_message': {'read_only': True}}
 
 # class RelateMessageUserSerializer(serializers.ModelSerializer):
 #
@@ -29,7 +30,7 @@ class ConversationListSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Messages
 #         fields= ['receiver_id','text','sender_id']
-#
+
 class MessageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Messages
